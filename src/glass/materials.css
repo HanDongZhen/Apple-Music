@@ -1,0 +1,219 @@
+/* Material engine: optical layers are independent from semantic geometry.
+   Web refraction is an approximation, not Apple's native compositor. */
+.glass {
+  --g-blur: 24px;
+  --g-alpha: 0.77;
+  --g-saturation: 1.35;
+  --g-brightness: 1.03;
+  --g-specular: 0.14;
+  --g-tint: 255, 255, 255;
+  --g-border: rgba(255, 255, 255, 0.55);
+  --g-refraction: 0;
+  --pointer-x: 20%;
+  --pointer-y: var(--scroll-light, 8%);
+  position: relative;
+  isolation: isolate;
+  background: rgba(var(--g-tint), var(--g-alpha));
+  backdrop-filter: blur(var(--g-blur)) saturate(var(--g-saturation)) brightness(var(--g-brightness));
+  -webkit-backdrop-filter: blur(var(--g-blur)) saturate(var(--g-saturation))
+    brightness(var(--g-brightness));
+  border: 1px solid var(--g-border);
+  box-shadow:
+    inset 0 1px 0 #ffffff40,
+    inset 0 -1px 0 #00000006,
+    0 5px 22px #00000009;
+  transition:
+    background var(--motion-normal),
+    box-shadow var(--motion-normal);
+}
+.glass:before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse at var(--pointer-x) var(--pointer-y),
+      rgba(255, 255, 255, var(--g-specular)),
+      transparent 65%
+    ),
+    linear-gradient(110deg, rgba(220, 235, 255, 0.035), transparent 30%, rgba(255, 219, 230, 0.025));
+  box-shadow:
+    inset 1px 1px 1px #ffffff1c,
+    inset -1px -1px 1px #0000000a;
+}
+:root[data-theme='dark'] .glass {
+  --g-tint: 29, 30, 33;
+  --g-brightness: 0.88;
+  --g-border: rgba(255, 255, 255, 0.09);
+  --g-specular: 0.065;
+  box-shadow:
+    inset 0 1px 0 #ffffff07,
+    inset 0 -1px 0 #00000024,
+    0 8px 30px #0000001f;
+}
+.glass--ultrathin {
+  --g-blur: 12px;
+  --g-alpha: 0.32;
+  --g-saturation: 1.5;
+  --g-specular: 0.2;
+  border-radius: 28px;
+}
+.glass--thin {
+  --g-blur: 18px;
+  --g-alpha: 0.52;
+  --g-saturation: 1.45;
+  border-radius: 18px;
+}
+.glass--regular {
+  --g-blur: 25px;
+  --g-alpha: 0.73;
+  border-radius: 15px;
+}
+.glass--thick {
+  --g-blur: 36px;
+  --g-alpha: 0.91;
+  --g-saturation: 1.2;
+  border-radius: 15px;
+}
+.glass--navigation {
+  --g-alpha: 0.8;
+  --g-blur: 30px;
+  --g-saturation: 1.1;
+  --g-specular: 0.025;
+}
+.glass--tabbar {
+  --g-alpha: 0.65;
+  --g-blur: 24px;
+  --g-saturation: 1.65;
+  --g-specular: 0.18;
+  --g-refraction: 1;
+  box-shadow:
+    inset 0 1px 1px #ffffffa0,
+    inset 0 -1px 1px #00000015,
+    0 6px 24px #00000018;
+}
+.glass--player {
+  --g-alpha: 0.48;
+  --g-blur: 32px;
+  --g-saturation: 1.6;
+  border-radius: 24px;
+}
+.glass--mini-player {
+  --g-alpha: 0.85;
+  --g-blur: 27px;
+  --g-specular: 0.13;
+  --g-saturation: 1.45;
+}
+.glass--control {
+  --g-alpha: 0.4;
+  --g-blur: 12px;
+  --g-specular: 0.2;
+  border-radius: 50%;
+  --g-refraction: 1;
+}
+.glass--menu,
+.glass--popover {
+  --g-alpha: 0.94;
+  --g-blur: 36px;
+  --g-saturation: 1.18;
+  --g-specular: 0.07;
+  border-radius: 16px;
+}
+.glass--modal {
+  --g-alpha: 0.96;
+  --g-blur: 40px;
+  --g-saturation: 1.15;
+  --g-specular: 0.06;
+}
+.glass--bottom-sheet {
+  --g-alpha: 0.88;
+  --g-blur: 32px;
+  --g-specular: 0.1;
+  border-radius: 24px 24px 0 0;
+}
+.glass--search {
+  --g-alpha: 0.75;
+  --g-blur: 17px;
+  --g-specular: 0.06;
+  border-radius: 12px;
+}
+.glass--queue {
+  --g-alpha: 0.92;
+  --g-blur: 32px;
+  --g-saturation: 1.2;
+  border-radius: 22px;
+}
+.glass--lyrics-control {
+  --g-tint: 30, 35, 40;
+  --g-alpha: 0.45;
+  --g-blur: 12px;
+  --g-specular: 0.035;
+  --g-border: #ffffff13;
+  border-radius: 30px;
+}
+:root[data-theme='dark'] .glass--navigation {
+  --g-tint: 22, 23, 25;
+  --g-alpha: 0.94;
+}
+:root[data-theme='dark'] .glass--mini-player {
+  --g-tint: 36, 37, 39;
+  --g-alpha: 0.87;
+}
+:root[data-theme='dark'] .glass--tabbar {
+  --g-tint: 41, 42, 45;
+  --g-alpha: 0.8;
+}
+:root[data-quality='high'] .glass--tabbar,
+:root[data-quality='high'] .glass--control {
+  backdrop-filter: url(#glass-refraction) blur(var(--g-blur)) saturate(var(--g-saturation))
+    brightness(var(--g-brightness));
+}
+.glass:focus-within {
+  box-shadow:
+    inset 0 1px 0 #ffffff33,
+    0 0 0 1px var(--blue-bg),
+    0 8px 25px #00000010;
+}
+:root[data-quality='reduced'] .glass {
+  --g-blur: 10px;
+  --g-alpha: 0.95;
+  --g-saturation: 1.1;
+}
+:root[data-quality='reduced'] .glass:before {
+  background: linear-gradient(135deg, #ffffff05, transparent);
+}
+:root[data-quality='reduced'] .ambient-field i {
+  animation: none;
+  filter: blur(45px);
+}
+@supports not (backdrop-filter: blur(1px)) {
+  .glass {
+    --g-alpha: 0.98;
+  }
+}
+@media (prefers-contrast: more) {
+  .glass {
+    --g-alpha: 1;
+    --g-blur: 0px;
+    --g-border: currentColor;
+  }
+}
+
+:root[data-quality='high'] .glass--tabbar:after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  backdrop-filter: blur(3px) brightness(1.08);
+  mask-image: linear-gradient(135deg, #000, transparent 30%, transparent 70%, #0003);
+}
+.glass .icon-button:active {
+  box-shadow:
+    inset 0 1px 2px #00000018,
+    inset 0 -1px 1px #ffffff20;
+}

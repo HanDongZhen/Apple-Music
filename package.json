@@ -1,0 +1,50 @@
+{
+  "name": "mr-han-music",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "lint": "eslint .",
+    "typecheck": "tsc -b --pretty false",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "scan-library": "node scripts/scan-library.mjs",
+    "deploy:pages": "npm run build && wrangler pages deploy dist",
+    "deploy:media": "wrangler deploy --config cloudflare/wrangler.toml",
+    "format": "prettier --write .",
+    "test:pwa": "playwright test --config playwright.production.config.ts"
+  },
+  "dependencies": {
+    "framer-motion": "^12.23.24",
+    "idb": "^8.0.3",
+    "jose": "^6.1.0",
+    "lucide-react": "^0.468.0",
+    "music-metadata": "^11.10.3",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.4",
+    "zod": "^4.1.12",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20251014.0",
+    "@eslint/js": "^9.39.0",
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.9.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^5.0.4",
+    "eslint": "^9.39.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.4.0",
+    "prettier": "^3.6.2",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.46.1",
+    "vite": "^7.1.12",
+    "vitest": "^3.2.4",
+    "wrangler": "4.45.0"
+  }
+}
